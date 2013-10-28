@@ -1,6 +1,8 @@
 package com.haiqiang.tankWar.view;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -16,9 +18,10 @@ public class ShowView extends Frame{
 	private Image offScreenImage = null;
 	
 	public void paint(Graphics g) {
-		System.out.println("paint" + y);
-//		g.get
-		g.fillOval(x, y--, 20, 20);
+		Color c = g.getColor();
+		g.setColor(Color.RED);
+		g.fillOval(x, y, 20, 20);
+		g.setColor(c);
 	}
 	
 	public void update(Graphics g) {
@@ -41,6 +44,7 @@ public class ShowView extends Frame{
 	public void launch() {
 		this.setBounds(100, 100, Parameter.FRAME_WIDTH, Parameter.FRAME_HEIGHT);
 		this.setResizable(false);
+		this.addKeyListener(new KeyMonitor());
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
@@ -64,5 +68,29 @@ public class ShowView extends Frame{
 
 			}
 		}
+	}
+	
+	class KeyMonitor extends KeyAdapter {
+
+		public void keyPressed(KeyEvent e) {
+//			System.out.println("pressed");
+			int keyCode = e.getKeyCode();
+			switch(keyCode) {
+			case KeyEvent.VK_W : 
+				y -= 5;
+				break;
+			case KeyEvent.VK_S : 
+				y += 5;
+				break;
+			case KeyEvent.VK_A : 
+				x -= 5;
+				break;
+			case KeyEvent.VK_D : 
+				x += 5;
+				break;
+			default : ;
+			}
+		}
+		
 	}
 }
