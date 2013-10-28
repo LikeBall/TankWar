@@ -13,9 +13,25 @@ public class ShowView extends Frame{
 	private int x = (Parameter.FRAME_WIDTH-20) / 2;
 	private int y = (Parameter.FRAME_HEIGHT - 30);
 	
+	private Image offScreenImage = null;
+	
 	public void paint(Graphics g) {
 		System.out.println("paint" + y);
+//		g.get
 		g.fillOval(x, y--, 20, 20);
+	}
+	
+	public void update(Graphics g) {
+		if(offScreenImage == null) {
+			offScreenImage = this.createImage(Parameter.FRAME_WIDTH, Parameter.FRAME_HEIGHT);
+		}
+		Graphics gOffScreen = offScreenImage.getGraphics();
+		Color c = gOffScreen.getColor();
+		gOffScreen.setColor(Color.GREEN);
+		gOffScreen.fillRect(0, 0, Parameter.FRAME_WIDTH, Parameter.FRAME_HEIGHT);
+		gOffScreen.setColor(c);
+		paint(gOffScreen);
+		g.drawImage(offScreenImage, 0, 0, null);
 	}
 	
 	public ShowView(String s) {
@@ -38,8 +54,15 @@ public class ShowView extends Frame{
 	class PaintThread implements Runnable {
 		
 		public void run() {
-			System.out.println("run");
-			repaint(1);
+			while(true) {
+				repaint(1);
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+			}
 		}
 	}
 }
