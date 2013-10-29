@@ -12,16 +12,12 @@ public class ShowView extends Frame{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private int x = (Parameter.FRAME_WIDTH-20) / 2;
-	private int y = (Parameter.FRAME_HEIGHT - 30);
-	
 	private Image offScreenImage = null;
+	private Tank tk = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20 , 20);
+	
 	
 	public void paint(Graphics g) {
-		Color c = g.getColor();
-		g.setColor(Color.RED);
-		g.fillOval(x, y, 20, 20);
-		g.setColor(c);
+		tk.draw(g);
 	}
 	
 	public void update(Graphics g) {
@@ -73,23 +69,7 @@ public class ShowView extends Frame{
 	class KeyMonitor extends KeyAdapter {
 
 		public void keyPressed(KeyEvent e) {
-//			System.out.println("pressed");
-			int keyCode = e.getKeyCode();
-			switch(keyCode) {
-			case KeyEvent.VK_W : 
-				y -= 5;
-				break;
-			case KeyEvent.VK_S : 
-				y += 5;
-				break;
-			case KeyEvent.VK_A : 
-				x -= 5;
-				break;
-			case KeyEvent.VK_D : 
-				x += 5;
-				break;
-			default : ;
-			}
+			tk.keyPressed(e);
 		}
 		
 	}
