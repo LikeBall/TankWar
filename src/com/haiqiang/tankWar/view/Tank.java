@@ -16,9 +16,8 @@ public class Tank {
 	boolean bu = false, bd = false, bl = false, br = false;
 	
 	private Parameter.Direction dir = Parameter.Direction.STOP;
+	private Parameter.Direction gunDir = Parameter.Direction.U;
 	private Missile ml = null;
-//	private 
-	
 	
 	Tank(int x, int y, int width, int heigth) {
 		this.x = x;
@@ -31,11 +30,47 @@ public class Tank {
 		Color c = g.getColor();
 		g.setColor(Color.RED);
 		g.fillOval(x, y, width, heigth);
+		drawGun(g);
 		g.setColor(c);
 		if(ml != null) {
 			ml.draw(g);
 		}
 		move();
+	}
+	
+	void drawGun(Graphics g) {
+		switch(gunDir) {
+		case U:
+			y -= Parameter.Y_SPEED;
+			break;
+		case D:
+			y += Parameter.Y_SPEED;
+			break;
+		case L:
+			x -= Parameter.X_SPEED;
+			break;
+		case R:
+			x += Parameter.Y_SPEED;
+			break;
+		case LU:
+			x -= Parameter.X_SPEED;
+			y -= Parameter.Y_SPEED;
+			break;
+		case RU:
+			x += Parameter.X_SPEED;
+			y -= Parameter.Y_SPEED;
+			break;
+		case LD:
+			x -= Parameter.X_SPEED;
+			y += Parameter.Y_SPEED;
+			break;
+		case RD:
+			x += Parameter.X_SPEED;
+			y += Parameter.Y_SPEED;
+			break;
+		default:
+			break;
+		}
 	}
 	
 	public void keyPressed(KeyEvent e) {
@@ -60,6 +95,7 @@ public class Tank {
 		default : ;
 		}
 		dir = location();
+		gunDirLocation();
 	}
 	
 	public void keyReleased(KeyEvent e) {
@@ -81,6 +117,7 @@ public class Tank {
 		default : ;
 		}
 		dir = location();
+		gunDirLocation();
 	}
 	
 	Parameter.Direction location() {
@@ -150,6 +187,15 @@ public class Tank {
 	}
 
 	Missile fire() {
-		return new Missile(x+width/2-Parameter.M_WIDTH/2, y+heigth/2-Parameter.M_HEIGTH/2, Parameter.M_WIDTH, Parameter.M_HEIGTH, dir);
+		return new Missile(x+width/2-Parameter.M_WIDTH/2, y+heigth/2-Parameter.M_HEIGTH/2, Parameter.M_WIDTH, Parameter.M_HEIGTH, gunDir);
 	}
+
+	void gunDirLocation() {
+		if(dir != Parameter.Direction.STOP) {
+			if(dir != gunDir) {
+				gunDir = dir;
+			}
+		}
+	}
+
 }
