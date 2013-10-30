@@ -71,8 +71,8 @@ public class ShowView extends Frame{
 			tk.keyPressed(e);
 		}
 		
-//		public void keyReleased(KeyEvent e) {
-//			tk.key
-//		}
+		public void keyReleased(KeyEvent e) {
+			tk.keyReleased(e);
+		}
 	}
 }

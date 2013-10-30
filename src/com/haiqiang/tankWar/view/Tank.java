@@ -52,6 +52,30 @@ public class Tank {
 		}
 		dir = location();
 	}
+	
+	public void keyReleased(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		
+		switch(keyCode) {
+		case KeyEvent.VK_W : 
+			bu = false;
+			break;
+		case KeyEvent.VK_S : 
+			bd = false;
+			break;
+		case KeyEvent.VK_A : 
+			bl = false;
+			break;
+		case KeyEvent.VK_D : 
+			br = false;
+			break;
+		default : ;
+		}
+		dir = location();
+	
+//		dir = Direction.STOP;
+	}
+	
 	Direction location() {
 		Direction d = Direction.STOP;
 		if(bu && !bd && !bl && !br) {
@@ -80,6 +104,7 @@ public class Tank {
 		}
 		return d;
 	}
+	
 	void move() {
 		switch(dir) {
 		case U:
