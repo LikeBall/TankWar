@@ -12,12 +12,11 @@ public class ShowView extends Frame{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Tank t = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20, 20);
-	
 	private Image offScreenImage = null;
-		
+	private Tank tk = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20 , 20);
+	
 	public void paint(Graphics g) {
-		t.draw(g);
+		tk.draw(g);
 	}
 	
 	public void update(Graphics g) {
@@ -69,8 +68,11 @@ public class ShowView extends Frame{
 	class KeyMonitor extends KeyAdapter {
 
 		public void keyPressed(KeyEvent e) {
-			t.keyPerssed(e);
+			tk.keyPressed(e);
 		}
 		
+//		public void keyReleased(KeyEvent e) {
+//			tk.key
+//		}
 	}
 }
