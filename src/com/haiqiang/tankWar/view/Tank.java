@@ -3,11 +3,14 @@ package com.haiqiang.tankWar.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.haiqiang.tankWar.param.Parameter;
 
 public class Tank {
 		
+	public static final int GUN_LENGTH = 10;
 	private int x;
 	private int y;
 	private int width;
@@ -17,7 +20,7 @@ public class Tank {
 	
 	private Parameter.Direction dir = Parameter.Direction.STOP;
 	private Parameter.Direction gunDir = Parameter.Direction.U;
-	private Missile ml = null;
+	private List<Missile> mls = new LinkedList<Missile>();
 	
 	Tank(int x, int y, int width, int heigth) {
 		this.x = x;
@@ -32,7 +35,8 @@ public class Tank {
 		g.fillOval(x, y, width, heigth);
 		drawGun(g);
 		g.setColor(c);
-		if(ml != null) {
+		
+		for(Missile ml : mls) {
 			ml.draw(g);
 		}
 		move();
@@ -41,32 +45,28 @@ public class Tank {
 	void drawGun(Graphics g) {
 		switch(gunDir) {
 		case U:
-			y -= Parameter.Y_SPEED;
+			g.drawLine(x+width/2, y+heigth/2, x+width/2, y-GUN_LENGTH);;
 			break;
 		case D:
-			y += Parameter.Y_SPEED;
+			g.drawLine(x+width/2, y+heigth/2, x+width/2, y+heigth+GUN_LENGTH);
 			break;
 		case L:
-			x -= Parameter.X_SPEED;
+			g.drawLine(x+width/2, y+heigth/2, x-GUN_LENGTH, y+heigth/2);
 			break;
 		case R:
-			x += Parameter.Y_SPEED;
+			g.drawLine(x+width/2, y+heigth/2, x+width+GUN_LENGTH, y+heigth/2);
 			break;
 		case LU:
-			x -= Parameter.X_SPEED;
-			y -= Parameter.Y_SPEED;
+			g.drawLine(x+width/2, y+heigth/2, x, y);
 			break;
 		case RU:
-			x += Parameter.X_SPEED;
-			y -= Parameter.Y_SPEED;
+			g.drawLine(x+width/2, y+heigth/2, x+width, y);
 			break;
 		case LD:
-			x -= Parameter.X_SPEED;
-			y += Parameter.Y_SPEED;
+			g.drawLine(x+width/2, y+heigth/2, x, y+heigth);
 			break;
 		case RD:
-			x += Parameter.X_SPEED;
-			y += Parameter.Y_SPEED;
+			g.drawLine(x+width/2, y+heigth/2, x+width, y+heigth);
 			break;
 		default:
 			break;
@@ -90,7 +90,7 @@ public class Tank {
 			br = true;
 			break;
 		case KeyEvent.VK_J :
-			ml = fire();
+			mls.add(fire());
 			break;
 		default : ;
 		}
