@@ -7,15 +7,18 @@ import java.awt.event.KeyEvent;
 import com.haiqiang.tankWar.param.Parameter;
 
 public class Tank {
+		
 	private int x;
 	private int y;
 	private int width;
 	private int heigth;
 	
 	boolean bu = false, bd = false, bl = false, br = false;
-	private enum Direction {U, D, L, R, LU, RU, LD, RD, STOP};
 	
-	private Direction dir = Direction.STOP;
+	private Parameter.Direction dir = Parameter.Direction.STOP;
+	private Missile ml = null;
+//	private 
+	
 	
 	Tank(int x, int y, int width, int heigth) {
 		this.x = x;
@@ -29,6 +32,9 @@ public class Tank {
 		g.setColor(Color.RED);
 		g.fillOval(x, y, width, heigth);
 		g.setColor(c);
+		if(ml != null) {
+			ml.draw(g);
+		}
 		move();
 	}
 	
@@ -47,6 +53,9 @@ public class Tank {
 			break;
 		case KeyEvent.VK_D : 
 			br = true;
+			break;
+		case KeyEvent.VK_J :
+			ml = fire();
 			break;
 		default : ;
 		}
@@ -72,35 +81,33 @@ public class Tank {
 		default : ;
 		}
 		dir = location();
-	
-//		dir = Direction.STOP;
 	}
 	
-	Direction location() {
-		Direction d = Direction.STOP;
+	Parameter.Direction location() {
+		Parameter.Direction d = Parameter.Direction.STOP;
 		if(bu && !bd && !bl && !br) {
-			d = Direction.U;
+			d = Parameter.Direction.U;
 		}
 		else if(!bu && bd && !bl && !br) {
-			d = Direction.D;
+			d = Parameter.Direction.D;
 		}
 		else if(!bu && !bd && bl && !br) {
-			d = Direction.L;
+			d = Parameter.Direction.L;
 		}
 		else if(!bu && !bd && !bl && br) {
-			d = Direction.R;
+			d = Parameter.Direction.R;
 		}
 		else if(bu && !bd && bl && !br) {
-			d = Direction.LU;
+			d = Parameter.Direction.LU;
 		}
 		else if(bu && !bd && !bl && br) {
-			d = Direction.RU;
+			d = Parameter.Direction.RU;
 		}
 		else if(!bu && bd && bl && !br) {
-			d = Direction.LD;
+			d = Parameter.Direction.LD;
 		}
 		else if(!bu && bd && !bl && br) {
-			d = Direction.RD;
+			d = Parameter.Direction.RD;
 		}
 		return d;
 	}
@@ -108,37 +115,41 @@ public class Tank {
 	void move() {
 		switch(dir) {
 		case U:
-			y -= Parameter.YSPEED;
+			y -= Parameter.Y_SPEED;
 			break;
 		case D:
-			y += Parameter.YSPEED;
+			y += Parameter.Y_SPEED;
 			break;
 		case L:
-			x -= Parameter.XSPEED;
+			x -= Parameter.X_SPEED;
 			break;
 		case R:
-			x += Parameter.YSPEED;
+			x += Parameter.Y_SPEED;
 			break;
 		case LU:
-			x -= Parameter.XSPEED;
-			y -= Parameter.YSPEED;
+			x -= Parameter.X_SPEED;
+			y -= Parameter.Y_SPEED;
 			break;
 		case RU:
-			x += Parameter.XSPEED;
-			y -= Parameter.YSPEED;
+			x += Parameter.X_SPEED;
+			y -= Parameter.Y_SPEED;
 			break;
 		case LD:
-			x -= Parameter.XSPEED;
-			y += Parameter.YSPEED;
+			x -= Parameter.X_SPEED;
+			y += Parameter.Y_SPEED;
 			break;
 		case RD:
-			x += Parameter.XSPEED;
-			y += Parameter.YSPEED;
+			x += Parameter.X_SPEED;
+			y += Parameter.Y_SPEED;
 			break;
 		case STOP:
 			break;
 		default:
 			
 		}
+	}
+
+	Missile fire() {
+		return new Missile(x+width/2-Parameter.M_WIDTH/2, y+heigth/2-Parameter.M_HEIGTH/2, Parameter.M_WIDTH, Parameter.M_HEIGTH, dir);
 	}
 }

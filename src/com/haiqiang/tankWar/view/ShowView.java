@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import com.haiqiang.tankWar.param.Parameter;
+import com.haiqiang.tankWar.param.*;
 
 public class ShowView extends Frame{
 	
@@ -14,9 +14,10 @@ public class ShowView extends Frame{
 	
 	private Image offScreenImage = null;
 	private Tank tk = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20 , 20);
-	
+//	private Missile ml = null;
 	public void paint(Graphics g) {
 		tk.draw(g);
+
 	}
 	
 	public void update(Graphics g) {
@@ -63,12 +64,13 @@ public class ShowView extends Frame{
 
 			}
 		}
+		
 	}
 	
 	class KeyMonitor extends KeyAdapter {
 
 		public void keyPressed(KeyEvent e) {
-			tk.keyPressed(e);
+				tk.keyPressed(e);
 		}
 		
 		public void keyReleased(KeyEvent e) {
