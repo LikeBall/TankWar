@@ -5,6 +5,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.haiqiang.tankWar.param.*;
 
@@ -13,11 +15,20 @@ public class ShowView extends Frame{
 	private static final long serialVersionUID = 1L;
 	
 	private Image offScreenImage = null;
-	private Tank tk = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20 , 20);
-//	private Missile ml = null;
+	private Tank tk = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20, 20, this);
+	public List<Missile> mls = new LinkedList<Missile>();
+	
 	public void paint(Graphics g) {
 		tk.draw(g);
-
+		for(Missile ml : mls) {
+			if(ml.isLive()){
+				ml.draw(g);
+			}
+//			else {
+//				mls.remove(ml);
+//				System.out.println(ml + "×Óµ¯ËÀÍö");
+//			}
+		}
 	}
 	
 	public void update(Graphics g) {
@@ -38,7 +49,7 @@ public class ShowView extends Frame{
 	}
 	
 	public void launch() {
-		this.setBounds(100, 100, Parameter.FRAME_WIDTH, Parameter.FRAME_HEIGHT);
+		this.setBounds(Parameter.FRAME_X_ORIGIN, Parameter.FRAME_Y_ORIGIN, Parameter.FRAME_WIDTH, Parameter.FRAME_HEIGHT);
 		this.setResizable(false);
 		this.addKeyListener(new KeyMonitor());
 		this.addWindowListener(new WindowAdapter() {

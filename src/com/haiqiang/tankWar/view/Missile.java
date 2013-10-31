@@ -14,6 +14,7 @@ public class Missile {
 	private int y;
 	private int width;
 	private int heigth;
+	private boolean bLive = false;
 	
 	private Parameter.Direction dir = Parameter.Direction.STOP;
 	
@@ -23,6 +24,7 @@ public class Missile {
 		this.width = width;
 		this.heigth = heigth;
 		this.dir = dir;
+		bLive = true;
 	}
 		
 	public void draw(Graphics g) {
@@ -33,6 +35,16 @@ public class Missile {
 		move();
 	}
 	
+	public boolean isLive() {
+//		boolean bLive = true;
+		if(x > Parameter.FRAME_WIDTH || x < 0 || y < 0 || y > Parameter.FRAME_HEIGHT) {
+			bLive = false;
+		}
+		else {
+			bLive = true;
+		} 
+		return bLive;
+	}
 	void move() {
 		switch(dir) {
 		case U:

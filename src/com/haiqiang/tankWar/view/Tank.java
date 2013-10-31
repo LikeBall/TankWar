@@ -3,8 +3,8 @@ package com.haiqiang.tankWar.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.util.LinkedList;
-import java.util.List;
+//import java.util.LinkedList;
+//import java.util.List;
 
 import com.haiqiang.tankWar.param.Parameter;
 
@@ -18,9 +18,10 @@ public class Tank {
 	
 	boolean bu = false, bd = false, bl = false, br = false;
 	
+	private ShowView sv;
 	private Parameter.Direction dir = Parameter.Direction.STOP;
 	private Parameter.Direction gunDir = Parameter.Direction.U;
-	private List<Missile> mls = new LinkedList<Missile>();
+//	private List<Missile> mls = new LinkedList<Missile>();
 	
 	Tank(int x, int y, int width, int heigth) {
 		this.x = x;
@@ -29,6 +30,10 @@ public class Tank {
 		this.heigth = heigth;
 	}
 		
+	Tank(int x, int y, int width, int heigth, ShowView sv) {
+		this(x, y, width, heigth);
+		this.sv = sv;
+	}
 	public void draw(Graphics g) {
 		Color c = g.getColor();
 		g.setColor(Color.RED);
@@ -36,9 +41,7 @@ public class Tank {
 		drawGun(g);
 		g.setColor(c);
 		
-		for(Missile ml : mls) {
-			ml.draw(g);
-		}
+		
 		move();
 	}
 	
@@ -89,9 +92,7 @@ public class Tank {
 		case KeyEvent.VK_D : 
 			br = true;
 			break;
-		case KeyEvent.VK_J :
-			mls.add(fire());
-			break;
+
 		default : ;
 		}
 		dir = location();
@@ -113,6 +114,9 @@ public class Tank {
 			break;
 		case KeyEvent.VK_D : 
 			br = false;
+			break;
+		case KeyEvent.VK_J :
+			sv.mls.add(fire());
 			break;
 		default : ;
 		}
