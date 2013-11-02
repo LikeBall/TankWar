@@ -3,8 +3,6 @@ package com.haiqiang.tankWar.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.util.LinkedList;
-import java.util.List;
 
 import com.haiqiang.tankWar.param.Parameter;
 
@@ -20,7 +18,9 @@ public class Tank {
 	
 	private Parameter.Direction dir = Parameter.Direction.STOP;
 	private Parameter.Direction gunDir = Parameter.Direction.U;
-	private List<Missile> mls = new LinkedList<Missile>();
+//	private List<Missile> mls = new LinkedList<Missile>();
+	private ShowView sv;
+	private boolean good = false;
 	
 	Tank(int x, int y, int width, int heigth) {
 		this.x = x;
@@ -29,20 +29,39 @@ public class Tank {
 		this.heigth = heigth;
 	}
 		
+	Tank(int x, int y, int width, int heigth, ShowView sv) {
+		this(x, y, width, heigth);
+		this.sv = sv;
+	}
+	
+	Tank(int x, int y, int width, int heigth, ShowView sv, boolean good) {
+		this(x, y, width, heigth, sv);
+		this.good = good;
+	}
+	
+	Tank(int x, int y, int width, int heigth, ShowView sv, boolean good, Parameter.Direction dir) {
+		this(x, y, width, heigth, sv, good);
+		this.dir = dir;
+	}
+	
 	public void draw(Graphics g) {
+		System.out.println("dir="+dir);
 		Color c = g.getColor();
-		g.setColor(Color.RED);
+		if(good){
+			g.setColor(Color.RED);
+		}
+		else {
+			g.setColor(Color.BLUE);
+		}
 		g.fillOval(x, y, width, heigth);
 		drawGun(g);
 		g.setColor(c);
-		
-		for(Missile ml : mls) {
-			ml.draw(g);
-		}
 		move();
 	}
 	
 	void drawGun(Graphics g) {
+		gunDirLocation();
+		System.out.println("gunDir=" + gunDir);
 		switch(gunDir) {
 		case U:
 			g.drawLine(x+width/2, y+heigth/2, x+width/2, y-GUN_LENGTH);;
@@ -89,13 +108,10 @@ public class Tank {
 		case KeyEvent.VK_D : 
 			br = true;
 			break;
-		case KeyEvent.VK_J :
-			mls.add(fire());
-			break;
 		default : ;
 		}
 		dir = location();
-		gunDirLocation();
+		System.out.println("dir="+dir);
 	}
 	
 	public void keyReleased(KeyEvent e) {
@@ -114,10 +130,14 @@ public class Tank {
 		case KeyEvent.VK_D : 
 			br = false;
 			break;
+		case KeyEvent.VK_J :
+			sv.mls.add(fire());
+			break;
+			
 		default : ;
 		}
 		dir = location();
-		gunDirLocation();
+//		gunDirLocation();
 	}
 	
 	Parameter.Direction location() {
@@ -150,6 +170,8 @@ public class Tank {
 	}
 	
 	void move() {
+		System.out.println("in move dir = " + dir);
+		
 		switch(dir) {
 		case U:
 			y -= Parameter.Y_SPEED;
@@ -182,12 +204,17 @@ public class Tank {
 		case STOP:
 			break;
 		default:
-			
 		}
+		x = Math.max(0, x);
+		y = Math.max(30, y);
+		x = Math.min(Parameter.FRAME_WIDTH - width, x);
+		y = Math.min(Parameter.FRAME_HEIGHT - heigth, y);
+//		System.out.println("x=" + x);
+//		System.out.println("y=" + y);
 	}
 
 	Missile fire() {
-		return new Missile(x+width/2-Parameter.M_WIDTH/2, y+heigth/2-Parameter.M_HEIGTH/2, Parameter.M_WIDTH, Parameter.M_HEIGTH, gunDir);
+		return new Missile(x+width/2-Parameter.M_WIDTH/2, y+heigth/2-Parameter.M_HEIGTH/2, Parameter.M_WIDTH, Parameter.M_HEIGTH, gunDir, sv);
 	}
 
 	void gunDirLocation() {

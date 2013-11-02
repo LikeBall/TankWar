@@ -13,9 +13,11 @@ public class Missile {
 	private int x;
 	private int y;
 	private int width;
-	private int heigth;
+	private int heigth;	
 	
 	private Parameter.Direction dir = Parameter.Direction.STOP;
+	private ShowView sv;
+	private boolean bLive = false;
 	
 	public Missile(int x, int y, int width, int heigth, Parameter.Direction dir) {
 		this.x = x;
@@ -23,14 +25,25 @@ public class Missile {
 		this.width = width;
 		this.heigth = heigth;
 		this.dir = dir;
+		bLive = true;
 	}
-		
+	
+	public Missile(int x, int y, int width, int heigth, Parameter.Direction dir, ShowView sv) {
+		this(x, y,  width, heigth, dir);
+		this.sv = sv;
+	}
+	
 	public void draw(Graphics g) {
-		Color c = g.getColor();
-		g.setColor(Color.BLACK);
-		g.fillOval(x, y, width, heigth);
-		g.setColor(c);
-		move();
+		if(isLive()) {
+			Color c = g.getColor();
+			g.setColor(Color.BLACK);
+			g.fillOval(x, y, width, heigth);
+			g.setColor(c);
+			move();
+		}
+		else {
+			sv.mls.remove(this);
+		}
 	}
 	
 	void move() {
@@ -67,5 +80,12 @@ public class Missile {
 			
 		}
 	}
-		
+
+	boolean isLive() {
+		if(x<=0 || y <=0 || x>=Parameter.FRAME_WIDTH || y>=Parameter.FRAME_HEIGHT) {
+			bLive = false;
+		}
+		return bLive;
+	}
+	
 }

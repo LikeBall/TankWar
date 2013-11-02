@@ -5,6 +5,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
+import java.util.ArrayList;
+
 
 import com.haiqiang.tankWar.param.*;
 
@@ -13,11 +16,20 @@ public class ShowView extends Frame{
 	private static final long serialVersionUID = 1L;
 	
 	private Image offScreenImage = null;
-	private Tank tk = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20 , 20);
-//	private Missile ml = null;
+	private Tank tk = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20, 20, this, true);
+//	private Tank tkEnemy = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20, 20, this, true);;
+	private List<Tank> tkEnemys = new ArrayList<Tank>();
+	public List<Missile> mls = new ArrayList<Missile>();
 	public void paint(Graphics g) {
+		g.drawString("MissileNum:" + Integer.toString(mls.size()), 50, 50);
 		tk.draw(g);
-
+//		tkEnemy.draw(g);
+		for(int i=0; i<tkEnemys.size(); i++) {
+			tkEnemys.get(i).draw(g);
+		}
+		for(int i=0; i<mls.size(); i++) {
+			mls.get(i).draw(g);
+		}
 	}
 	
 	public void update(Graphics g) {
@@ -47,15 +59,23 @@ public class ShowView extends Frame{
 			}			
 		});
 		this.setVisible(true);
+//		tkEnemy = newEnemy();
+		tkEnemys.add(newEnemy());
+//		tkEnemys.add(new Tank(100,100,20,20,this));
 		Thread t = new Thread(new PaintThread());
 		t.start();
+	}
+	
+	Tank newEnemy() {
+		return new Tank(50, 50, 20, 20, this, false, Parameter.Direction.R);
+//		return new Tank(50, 50, 20, 20, this);
 	}
 	
 	class PaintThread implements Runnable {
 		
 		public void run() {
 			while(true) {
-				repaint(1);
+				repaint();
 				try {
 					Thread.sleep(50);
 				} catch (InterruptedException e) {
