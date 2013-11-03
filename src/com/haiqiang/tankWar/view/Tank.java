@@ -2,6 +2,7 @@ package com.haiqiang.tankWar.view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import com.haiqiang.tankWar.param.Parameter;
@@ -18,7 +19,8 @@ public class Tank {
 	
 	private Parameter.Direction dir = Parameter.Direction.STOP;
 	private Parameter.Direction gunDir = Parameter.Direction.U;
-//	private List<Missile> mls = new LinkedList<Missile>();
+
+	private boolean live = true;
 	private ShowView sv;
 	private boolean good = false;
 	
@@ -45,18 +47,22 @@ public class Tank {
 	}
 	
 	public void draw(Graphics g) {
-		System.out.println("dir="+dir);
-		Color c = g.getColor();
-		if(good){
-			g.setColor(Color.RED);
+		if(!live) {
+			sv.tkEnemys.remove(this);
 		}
-		else {
-			g.setColor(Color.BLUE);
+		else{
+			Color c = g.getColor();
+			if(good){
+				g.setColor(Color.RED);
+			}
+			else {
+				g.setColor(Color.BLUE);
+			}
+			g.fillOval(x, y, width, heigth);
+			drawGun(g);
+			g.setColor(c);
+			move();
 		}
-		g.fillOval(x, y, width, heigth);
-		drawGun(g);
-		g.setColor(c);
-		move();
 	}
 	
 	void drawGun(Graphics g) {
@@ -225,4 +231,15 @@ public class Tank {
 		}
 	}
 
+	Rectangle getRect() {
+		return new Rectangle(x, y, width, heigth);
+	}
+	
+	boolean isLive() {
+		return live;
+	}
+	;
+	void setLive(boolean b) {
+		live = b;
+	}
 }

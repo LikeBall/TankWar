@@ -2,6 +2,7 @@ package com.haiqiang.tankWar.view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import com.haiqiang.tankWar.param.Parameter;
 
@@ -87,5 +88,17 @@ public class Missile {
 		}
 		return bLive;
 	}
+
+	boolean hitTank(Tank tk) {
+		if(this.getRect().intersects(tk.getRect())) {
+			this.bLive = false;
+			tk.setLive(false);
+			return true;
+		}
+		return false;
+	}
 	
+	Rectangle getRect() {
+		return new Rectangle(x, y, width, heigth);
+	}
 }

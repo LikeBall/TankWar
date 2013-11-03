@@ -18,16 +18,18 @@ public class ShowView extends Frame{
 	private Image offScreenImage = null;
 	private Tank tk = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20, 20, this, true);
 //	private Tank tkEnemy = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20, 20, this, true);;
-	private List<Tank> tkEnemys = new ArrayList<Tank>();
+	public List<Tank> tkEnemys = new ArrayList<Tank>();
 	public List<Missile> mls = new ArrayList<Missile>();
 	public void paint(Graphics g) {
 		g.drawString("MissileNum:" + Integer.toString(mls.size()), 50, 50);
 		tk.draw(g);
-//		tkEnemy.draw(g);
 		for(int i=0; i<tkEnemys.size(); i++) {
 			tkEnemys.get(i).draw(g);
 		}
 		for(int i=0; i<mls.size(); i++) {
+			for(int j=0; j<tkEnemys.size(); j++) {
+				mls.get(i).hitTank(tkEnemys.get(j));
+			}
 			mls.get(i).draw(g);
 		}
 	}
@@ -59,16 +61,13 @@ public class ShowView extends Frame{
 			}			
 		});
 		this.setVisible(true);
-//		tkEnemy = newEnemy();
 		tkEnemys.add(newEnemy());
-//		tkEnemys.add(new Tank(100,100,20,20,this));
 		Thread t = new Thread(new PaintThread());
 		t.start();
 	}
 	
 	Tank newEnemy() {
 		return new Tank(50, 50, 20, 20, this, false, Parameter.Direction.R);
-//		return new Tank(50, 50, 20, 20, this);
 	}
 	
 	class PaintThread implements Runnable {
