@@ -8,7 +8,6 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.ArrayList;
 
-
 import com.haiqiang.tankWar.param.*;
 
 public class ShowView extends Frame{
@@ -16,10 +15,11 @@ public class ShowView extends Frame{
 	private static final long serialVersionUID = 1L;
 	
 	private Image offScreenImage = null;
+
 	private Tank tk = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20, 20, this, true);
-//	private Tank tkEnemy = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20, 20, this, true);;
 	public List<Tank> tkEnemys = new ArrayList<Tank>();
 	public List<Missile> mls = new ArrayList<Missile>();
+
 	public void paint(Graphics g) {
 		g.drawString("MissileNum:" + Integer.toString(mls.size()), 50, 50);
 		tk.draw(g);
@@ -52,7 +52,7 @@ public class ShowView extends Frame{
 	}
 	
 	public void launch() {
-		this.setBounds(100, 100, Parameter.FRAME_WIDTH, Parameter.FRAME_HEIGHT);
+		this.setBounds(Parameter.FRAME_X_ORIGIN, Parameter.FRAME_Y_ORIGIN, Parameter.FRAME_WIDTH, Parameter.FRAME_HEIGHT);
 		this.setResizable(false);
 		this.addKeyListener(new KeyMonitor());
 		this.addWindowListener(new WindowAdapter() {

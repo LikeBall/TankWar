@@ -17,11 +17,11 @@ public class Tank {
 	
 	boolean bu = false, bd = false, bl = false, br = false;
 	
+	private ShowView sv;
 	private Parameter.Direction dir = Parameter.Direction.STOP;
 	private Parameter.Direction gunDir = Parameter.Direction.U;
 
 	private boolean live = true;
-	private ShowView sv;
 	private boolean good = false;
 	
 	Tank(int x, int y, int width, int heigth) {
@@ -35,7 +35,7 @@ public class Tank {
 		this(x, y, width, heigth);
 		this.sv = sv;
 	}
-	
+
 	Tank(int x, int y, int width, int heigth, ShowView sv, boolean good) {
 		this(x, y, width, heigth, sv);
 		this.good = good;
@@ -139,11 +139,9 @@ public class Tank {
 		case KeyEvent.VK_J :
 			sv.mls.add(fire());
 			break;
-			
 		default : ;
 		}
 		dir = location();
-//		gunDirLocation();
 	}
 	
 	Parameter.Direction location() {
@@ -215,8 +213,6 @@ public class Tank {
 		y = Math.max(30, y);
 		x = Math.min(Parameter.FRAME_WIDTH - width, x);
 		y = Math.min(Parameter.FRAME_HEIGHT - heigth, y);
-//		System.out.println("x=" + x);
-//		System.out.println("y=" + y);
 	}
 
 	Missile fire() {

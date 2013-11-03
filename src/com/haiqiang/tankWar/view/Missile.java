@@ -14,11 +14,11 @@ public class Missile {
 	private int x;
 	private int y;
 	private int width;
-	private int heigth;	
+	private int heigth;
+	private boolean bLive = false;
 	
 	private Parameter.Direction dir = Parameter.Direction.STOP;
 	private ShowView sv;
-	private boolean bLive = false;
 	
 	public Missile(int x, int y, int width, int heigth, Parameter.Direction dir) {
 		this.x = x;
@@ -47,6 +47,15 @@ public class Missile {
 		}
 	}
 	
+	public boolean isLive() {
+		if(x > Parameter.FRAME_WIDTH || x < 0 || y < 0 || y > Parameter.FRAME_HEIGHT) {
+			bLive = false;
+		}
+		else {
+			bLive = true;
+		} 
+		return bLive;
+	}
 	void move() {
 		switch(dir) {
 		case U:
@@ -80,13 +89,6 @@ public class Missile {
 		default:
 			
 		}
-	}
-
-	boolean isLive() {
-		if(x<=0 || y <=0 || x>=Parameter.FRAME_WIDTH || y>=Parameter.FRAME_HEIGHT) {
-			bLive = false;
-		}
-		return bLive;
 	}
 
 	boolean hitTank(Tank tk) {
