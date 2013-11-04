@@ -5,7 +5,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.LinkedList;
+import java.util.ArrayList;
+//import java.util.LinkedList;
 import java.util.List;
 
 import com.haiqiang.tankWar.param.*;
@@ -16,19 +17,15 @@ public class ShowView extends Frame{
 	
 	private Image offScreenImage = null;
 	private Tank tk = new Tank((Parameter.FRAME_WIDTH-20)/2, Parameter.FRAME_HEIGHT-30, 20, 20, this);
-	public List<Missile> mls = new LinkedList<Missile>();
+	public List<Missile> mls = new ArrayList<Missile>();
 	
 	public void paint(Graphics g) {
+		drawMlsNum(g);
 		tk.draw(g);
 		for(Missile ml : mls) {
-			if(ml.isLive()){
 				ml.draw(g);
-			}
-//			else {
-//				mls.remove(ml);
-//				System.out.println(ml + "×Óµ¯ËÀÍö");
-//			}
 		}
+		
 	}
 	
 	public void update(Graphics g) {
@@ -61,7 +58,7 @@ public class ShowView extends Frame{
 		Thread t = new Thread(new PaintThread());
 		t.start();
 	}
-	
+		
 	class PaintThread implements Runnable {
 		
 		public void run() {
@@ -87,5 +84,12 @@ public class ShowView extends Frame{
 		public void keyReleased(KeyEvent e) {
 			tk.keyReleased(e);
 		}
+	}
+
+	private void drawMlsNum(Graphics g) {
+		Color c = g.getColor();
+		g.setColor(Color.BLACK);
+		g.drawString("Missile Number:" + Integer.toString(mls.size()), 50, 50);
+		g.setColor(c);
 	}
 }

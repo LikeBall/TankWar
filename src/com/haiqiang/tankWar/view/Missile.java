@@ -17,6 +17,7 @@ public class Missile {
 	private boolean bLive = false;
 	
 	private Parameter.Direction dir = Parameter.Direction.STOP;
+	private ShowView sv = null;
 	
 	public Missile(int x, int y, int width, int heigth, Parameter.Direction dir) {
 		this.x = x;
@@ -26,19 +27,27 @@ public class Missile {
 		this.dir = dir;
 		bLive = true;
 	}
+	
+	public Missile(int x, int y, int width, int heigth, Parameter.Direction dir, ShowView sv) {
+		this(x, y, width, heigth, dir);
+		this.sv = sv;
+	}
 		
 	public void draw(Graphics g) {
-		Color c = g.getColor();
-		g.setColor(Color.BLACK);
-		g.fillOval(x, y, width, heigth);
-		g.setColor(c);
-		move();
+		if(this.isLive()){
+			Color c = g.getColor();
+			g.setColor(Color.BLACK);
+			g.fillOval(x, y, width, heigth);
+			g.setColor(c);
+			move();
+		}
 	}
 	
 	public boolean isLive() {
 //		boolean bLive = true;
 		if(x > Parameter.FRAME_WIDTH || x < 0 || y < 0 || y > Parameter.FRAME_HEIGHT) {
 			bLive = false;
+			sv.mls.remove(this);
 		}
 		else {
 			bLive = true;
