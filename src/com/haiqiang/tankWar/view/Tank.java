@@ -2,11 +2,11 @@ package com.haiqiang.tankWar.view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-//import java.util.LinkedList;
-//import java.util.List;
 
 import com.haiqiang.tankWar.param.Parameter;
+import com.haiqiang.tankWar.param.UtilMethod;
 
 public class Tank {
 		
@@ -21,7 +21,9 @@ public class Tank {
 	private ShowView sv;
 	private Parameter.Direction dir = Parameter.Direction.STOP;
 	private Parameter.Direction gunDir = Parameter.Direction.U;
-//	private List<Missile> mls = new LinkedList<Missile>();
+
+	private boolean live = true;
+	private boolean good = false;
 	
 	Tank(int x, int y, int width, int heigth) {
 		this.x = x;
@@ -34,18 +36,39 @@ public class Tank {
 		this(x, y, width, heigth);
 		this.sv = sv;
 	}
+
+	Tank(int x, int y, int width, int heigth, ShowView sv, boolean good) {
+		this(x, y, width, heigth, sv);
+		this.good = good;
+	}
+	
+	Tank(int x, int y, int width, int heigth, ShowView sv, boolean good, Parameter.Direction dir) {
+		this(x, y, width, heigth, sv, good);
+		this.dir = dir;
+	}
+	
 	public void draw(Graphics g) {
-		Color c = g.getColor();
-		g.setColor(Color.RED);
-		g.fillOval(x, y, width, heigth);
-		drawGun(g);
-		g.setColor(c);
-		
-		
-		move();
+		if(!live) {
+			sv.tkEnemys.remove(this);
+			sv.bombs.add(new Bomb(x+width/2, y+heigth/2, sv));
+		}
+		else{
+			Color c = g.getColor();
+			if(good){
+				g.setColor(Color.RED);
+			}
+			else {
+				g.setColor(Color.BLUE);
+			}
+			g.fillOval(x, y, width, heigth);
+			drawGun(g);
+			g.setColor(c);
+			move();
+		}
 	}
 	
 	void drawGun(Graphics g) {
+		gunDirLocation();
 		switch(gunDir) {
 		case U:
 			g.drawLine(x+width/2, y+heigth/2, x+width/2, y-GUN_LENGTH);;
@@ -92,11 +115,9 @@ public class Tank {
 		case KeyEvent.VK_D : 
 			br = true;
 			break;
-
 		default : ;
 		}
 		dir = location();
-		gunDirLocation();
 	}
 	
 	public void keyReleased(KeyEvent e) {
@@ -121,7 +142,6 @@ public class Tank {
 		default : ;
 		}
 		dir = location();
-		gunDirLocation();
 	}
 	
 	Parameter.Direction location() {
@@ -154,6 +174,7 @@ public class Tank {
 	}
 	
 	void move() {
+		
 		switch(dir) {
 		case U:
 			y -= Parameter.Y_SPEED;
@@ -186,7 +207,16 @@ public class Tank {
 		case STOP:
 			break;
 		default:
-			
+		}
+
+		x = Math.max(0, x);
+		y = Math.max(30, y);
+		x = Math.min(Parameter.FRAME_WIDTH - width, x);
+		y = Math.min(Parameter.FRAME_HEIGHT - heigth, y);
+		
+		if(!good) {
+			if(x==0 || y == 30 || x == Parameter.FRAME_WIDTH - width || y == Parameter.FRAME_HEIGHT - heigth)
+				dir = UtilMethod.randomDir();
 		}
 	}
 
@@ -202,4 +232,16 @@ public class Tank {
 		}
 	}
 
+	Rectangle getRect() {
+		return new Rectangle(x, y, width, heigth);
+	}
+	
+	boolean isLive() {
+		return live;
+	}
+	
+	void setLive(boolean b) {
+		live = b;
+	}
+	
 }

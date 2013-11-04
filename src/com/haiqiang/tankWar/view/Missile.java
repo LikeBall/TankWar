@@ -2,6 +2,7 @@ package com.haiqiang.tankWar.view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import com.haiqiang.tankWar.param.Parameter;
 
@@ -32,26 +33,25 @@ public class Missile {
 		this(x, y, width, heigth, dir);
 		this.sv = sv;
 	}
-		
+			
 	public void draw(Graphics g) {
-		if(this.isLive()){
+		if(isLive()) {
 			Color c = g.getColor();
 			g.setColor(Color.BLACK);
 			g.fillOval(x, y, width, heigth);
 			g.setColor(c);
 			move();
 		}
+		else {
+			sv.mls.remove(this);
+		}
 	}
 	
 	public boolean isLive() {
-//		boolean bLive = true;
 		if(x > Parameter.FRAME_WIDTH || x < 0 || y < 0 || y > Parameter.FRAME_HEIGHT) {
 			bLive = false;
 			sv.mls.remove(this);
 		}
-		else {
-			bLive = true;
-		} 
 		return bLive;
 	}
 	void move() {
@@ -88,5 +88,19 @@ public class Missile {
 			
 		}
 	}
+
+	boolean hitTank(Tank tk) {
 		
+		if(this.getRect().intersects(tk.getRect())) {
+//			System.out.println("jizhongle");
+			this.bLive = false;
+			tk.setLive(false);
+			return true;
+		}
+		return false;
+	}
+	
+	Rectangle getRect() {
+		return new Rectangle(x, y, width, heigth);
+	}
 }
